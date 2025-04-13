@@ -1,5 +1,5 @@
-count,url,type
-0,br-icloud.com.br,phishing
+count,url,labels
+0,br-icloud.com.br,phishing 
 1,mp3raid.com/music/krizz_kaliko.html,benign
 2,bopsecrets.org/rexroth/cr/1.htm,benign
 3,http://www.garage-pirenne.be/index.php?option=com_content&view=article&id=70&vsig70_0=15,defacement
