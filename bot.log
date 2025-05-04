@@ -1,0 +1,95 @@
+2025-05-04 12:23:33,872 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:24:41,518 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:26:14,352 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:29:08,157 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:29:45,410 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:31:00,903 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:32:43,074 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:33:01,079 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:34:18,873 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:34:43,505 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:36:04,566 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:43:27,370 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:45:14,103 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:46:00,178 - __main__ - ERROR - Требуется установить TELEGRAM_BOT_TOKEN в переменных окружения!
+2025-05-04 12:47:01,780 - __main__ - INFO - Загрузка url_classifier_LSTM.keras...
+2025-05-04 12:47:01,780 - __main__ - ERROR - Ошибка загрузки url_classifier_LSTM.keras: stat: path should be string, bytes, os.PathLike or integer, not BufferedReader
+2025-05-04 12:47:01,780 - __main__ - CRITICAL - Failed to initialize bot: stat: path should be string, bytes, os.PathLike or integer, not BufferedReader
+2025-05-04 12:50:47,767 - __main__ - INFO - Starting bot...
+2025-05-04 12:50:48,156 - aiogram - INFO - Bot: Predict URL [@predict_url_bot]
+2025-05-04 12:50:48,360 - aiogram - WARNING - Updates were skipped successfully.
+2025-05-04 12:50:48,360 - aiogram.dispatcher.dispatcher - INFO - Start polling.
+2025-05-04 12:51:11,638 - __main__ - INFO - New user: 915163163
+2025-05-04 12:51:26,469 - __main__ - INFO - Request from 915163163: https://github.com
+2025-05-04 12:51:26,726 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 170, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 12:51:30,451 - __main__ - INFO - Request from 915163163: http://example.com/login.php
+2025-05-04 12:51:30,864 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 170, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 12:51:31,761 - __main__ - INFO - Request from 915163163: https://www.google.com
+2025-05-04 12:51:32,010 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 170, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 12:51:32,987 - __main__ - INFO - Request from 915163163: https://github.com
+2025-05-04 12:51:33,229 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 170, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 12:54:00,886 - __main__ - INFO - Request from 915163163: https://www.google.com
+2025-05-04 12:54:01,140 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 170, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 12:54:43,821 - aiogram.dispatcher.dispatcher - INFO - Stop polling...
+2025-05-04 12:54:43,821 - aiogram - WARNING - Goodbye!
+2025-05-04 12:54:47,977 - __main__ - ERROR - Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:54:47,977 - __main__ - CRITICAL - Failed to initialize bot: Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:55:51,365 - __main__ - ERROR - Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:55:51,365 - __main__ - CRITICAL - Failed to initialize bot: Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:56:13,297 - __main__ - ERROR - Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:56:13,297 - __main__ - CRITICAL - Failed to initialize bot: Отсутствуют необходимые файлы:
+label_encoder
+2025-05-04 12:57:13,143 - __main__ - CRITICAL - Failed to initialize bot: _load_artifact() got an unexpected keyword argument 'is_model'
+2025-05-04 13:03:35,471 - __main__ - CRITICAL - Failed to initialize bot: _load_artifact() got an unexpected keyword argument 'is_model'
+2025-05-04 13:05:47,021 - __main__ - INFO - Starting bot...
+2025-05-04 13:05:47,021 - __main__ - CRITICAL - Bot failed: 'URLClassifierBot' object has no attribute 'dp'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 217, in run
+    executor.start_polling(self.dp, skip_updates=True)
+AttributeError: 'URLClassifierBot' object has no attribute 'dp'
+2025-05-04 13:05:47,022 - __main__ - CRITICAL - Failed to initialize bot: 'URLClassifierBot' object has no attribute 'dp'
+2025-05-04 13:09:17,987 - __main__ - INFO - Starting bot...
+2025-05-04 13:09:17,987 - __main__ - CRITICAL - Bot failed: 'URLClassifierBot' object has no attribute 'dp'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 213, in run
+    executor.start_polling(self.dp, skip_updates=True)
+AttributeError: 'URLClassifierBot' object has no attribute 'dp'
+2025-05-04 13:09:17,987 - __main__ - CRITICAL - Failed to initialize bot: 'URLClassifierBot' object has no attribute 'dp'
+2025-05-04 13:12:05,173 - __main__ - CRITICAL - Failed to initialize bot: Token is invalid!
+2025-05-04 13:12:27,150 - __main__ - INFO - Starting bot...
+2025-05-04 13:12:27,538 - aiogram - INFO - Bot: Predict URL [@predict_url_bot]
+2025-05-04 13:12:27,745 - aiogram - WARNING - Updates were skipped successfully.
+2025-05-04 13:12:27,746 - aiogram.dispatcher.dispatcher - INFO - Start polling.
+2025-05-04 13:12:37,843 - __main__ - INFO - Request from 915163163: https://www.google.com
+2025-05-04 13:12:38,166 - __main__ - ERROR - Processing error: 'URLClassifierBot' object has no attribute 'tokenizer'
+Traceback (most recent call last):
+  File "C:\Users\PYTHON\PycharmProjects\url\test.py", line 176, in _process_url
+    sequence = self.tokenizer.texts_to_sequences([url])
+AttributeError: 'URLClassifierBot' object has no attribute 'tokenizer'
+2025-05-04 13:13:25,426 - aiogram.dispatcher.dispatcher - INFO - Stop polling...
+2025-05-04 13:13:25,427 - aiogram - WARNING - Goodbye!
