@@ -29,11 +29,14 @@ async def cmd_dice(message: types.Message):
     await message.answer_dice(emoji="🎲")
 
 #Загружаем готовый материал
-MODEL = load_model('url_classifier_LSTM.h5')
+MODEL = load_model('url_classifier_LSTM.keras')
 with open('tokenizer.pkl', 'rb') as f:
     TOKENIZER = pickle.load(f)
-with open('label_encoder.pkl', 'rb') as f:
+with open('LabelEncoder.pkl', 'rb') as f:
       LE = pickle.load(f)
+
+
+
 
 # Запуск процесса поллинга новых апдейтов
 async def main():
@@ -48,5 +51,5 @@ if __name__ == "__main__":
 # Для записей с типом Secret* необходимо
 # вызывать метод get_secret_value(),
 # чтобы получить настоящее содержимое вместо '*******'
-bot = Bot(token=config.bot_token.get_secret_value())
+
 
