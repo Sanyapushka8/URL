@@ -4,15 +4,14 @@ import pickle
 import re
 import time
 import numpy as np
-
+from keras.preprocessing.sequence import pad_sequences
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command, StateFilter
-from joblib import executor
 from keras.models import load_model
 from keras.src.utils import pad_sequences
-from telebot.states import StatesGroup, State
+from aiogram.fsm.state import StatesGroup, State
 
 
 # Включаем логирование, чтобы не пропустить важные сообщения
@@ -24,7 +23,7 @@ dp = Dispatcher()
 MAX_LEN = 150
 logger = logging.getLogger(__name__)
 #Загружаем готовый материал
-MODEL = load_model('url_classifier_LSTM.keras')
+MODEL = load_model('url_classifier_LSTM1.keras')
 with open('tokenizer.pkl', 'rb') as f:
     TOKENIZER = pickle.load(f)
 with open('LabelEncoder.pkl', 'rb') as f:
@@ -50,6 +49,21 @@ class URLs(StatesGroup):
      write_url_name = State()
      url_classifier = State()
 
+def predict_url_type(url):
+    try:
+        # Токенизация
+        sequence = TOKENIZER.texts_to_sequences([url])
+        padded = pad_sequences(sequence, maxlen=MAX_LEN)
+
+        # Предсказание
+        proba = MODEL.predict(padded)[0]
+        return {
+            "url": url,
+            "predicted_class": LE.inverse_transform([np.argmax(proba)])[0],
+            "probabilities": dict(zip(LE.classes_, np.round(proba, 3)))
+        }
+    except Exception as e:
+        return {"error": str(e)}
 
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     row = [KeyboardButton(text=item) for item in items]
@@ -85,7 +99,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
 
 @dp.message(URLs.write_url_name)
 async def _process_url(message: types.Message):
-    url = message.text.split()
+    url = message.text
     user = message.from_user
     logger.info(f"Request from {user.id}: {url}")
     if not _is_valid_url(url):
@@ -96,6 +110,17 @@ async def _process_url(message: types.Message):
             parse_mode='HTML'
         )
         return
+    predict_url = predict_url_type(url)
+    await message.answer(f"🔗 Ссылка: {predict_url['url']}\n"
+        f"📊 Класс: {predict_url['predicted_class']}\n\n"
+        f"📈 Вероятности:\n"
+        f"• Безопасная: {predict_url['probabilities'].get('benign', 0):.3f}\n"
+        f"• Порча: {predict_url['probabilities'].get('defacement', 0):.3f}\n"
+        f"• Фишинг: {predict_url['probabilities'].get('phishing', 0):.3f}\n"
+        f"• Вирус: {predict_url['probabilities'].get('malware', 0):.3f}")
+
+
+
 
 
 async def main():
