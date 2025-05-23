@@ -2,17 +2,13 @@ import asyncio
 import logging
 import pickle
 import re
-import time
 import numpy as np
-from keras.preprocessing.sequence import pad_sequences
 from aiogram.fsm.context import FSMContext
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command, StateFilter
-from keras.models import load_model
-from keras.src.utils import pad_sequences
 from aiogram.fsm.state import StatesGroup, State
-
+from urllib.parse import urlparse
 
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
@@ -23,11 +19,12 @@ dp = Dispatcher()
 MAX_LEN = 150
 logger = logging.getLogger(__name__)
 #Загружаем готовый материал
-MODEL = load_model('url_classifier_LSTM1.keras')
-with open('tokenizer.pkl', 'rb') as f:
-    TOKENIZER = pickle.load(f)
-with open('LabelEncoder.pkl', 'rb') as f:
-      LE = pickle.load(f)
+with open("url_classifierXG1.pkl", "rb") as f:
+    MODEL = pickle.load(f)
+with open('tfidfXG.pkl', 'rb') as f:
+      tfidf = pickle.load(f)
+with open('label_encoderXG.pkl', 'rb') as f:
+    le = pickle.load(f)
 
 from datetime import datetime
 dp["started_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
@@ -36,14 +33,31 @@ dp["started_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
 async def cmd_info(message: types.Message, started_at: str):
     await message.answer(f"Бот запущен {started_at}")
 
-# Хэндлер на команду /start
-#@dp.message(Command("start"))
-#async def cmd_start(message: types.Message):
-#    await message.answer("Напиши мне URL и я проверю её на вредоность")
-
 @dp.message(Command("dice"))
 async def cmd_dice(message: types.Message):
     await message.answer_dice(emoji="🎲")
+
+def tokenize_url(url):
+    try:
+        # Удаление протокола и разделение URL на части
+        parsed = urlparse(url)
+        path = parsed.path
+        query = parsed.query
+        tokens = []
+
+        # Разделение домена на части
+        if parsed.netloc:
+            tokens += re.split(r'[\.\-]', parsed.netloc)
+
+        # Разделение пути и параметров
+        tokens += re.split(r'[/&=?]', path + " " + query)
+
+        # Фильтрация и очистка токенов
+        tokens = [t.lower().strip() for t in tokens if t.strip() != '']
+        return ' '.join(tokens)
+
+    except:
+        return ''
 
 class URLs(StatesGroup):
      write_url_name = State()
@@ -52,17 +66,23 @@ class URLs(StatesGroup):
 def predict_url_type(url):
     try:
         # Токенизация
-        sequence = TOKENIZER.texts_to_sequences([url])
-        padded = pad_sequences(sequence, maxlen=MAX_LEN)
+        tokens = tokenize_url(url)
+
+        # Векторизация
+        X_new = tfidf.transform([tokens])
 
         # Предсказание
-        proba = MODEL.predict(padded)[0]
+        proba = MODEL.predict_proba(X_new)[0]
+        pred_class = le.inverse_transform([np.argmax(proba)])[0]
+
         return {
             "url": url,
-            "predicted_class": LE.inverse_transform([np.argmax(proba)])[0],
-            "probabilities": dict(zip(LE.classes_, np.round(proba, 3)))
+            "predicted_class": pred_class,
+            "probabilities": dict(zip(le.classes_, proba.round(3)))
         }
     except Exception as e:
+        # Логирование ошибки для отладки
+        logger.error(f"Error processing URL {url}: {str(e)}")
         return {"error": str(e)}
 
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
@@ -85,17 +105,16 @@ def _is_valid_url(url):
     )
     return bool(re.match(pattern, url))
 
-
 @dp.message(StateFilter(None), Command('start'))
 async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(
-        text='Напишите URL, либо выберите любую из списка🤩',
-        reply_markup = make_row_keyboard(available_url_names)
+        text=f"Привет!\n"
+        "Я бот для анализа безопасности URL.\n"
+        "Просто отправь мне ссылку или выбери из списка, и я проверю её на:\n"
+        "• Безопасные сайты\n• Порча\n• Фишинг\n• Вредоносное ПО",
+        reply_markup = make_row_keyboard(available_url_names),
         )
     await state.set_state(URLs.write_url_name)
-
-    #@dp.message(URLs.write_url_name)
-    #if _is_valid_url(url):
 
 @dp.message(URLs.write_url_name)
 async def _process_url(message: types.Message):
@@ -118,10 +137,6 @@ async def _process_url(message: types.Message):
         f"• Порча: {predict_url['probabilities'].get('defacement', 0):.3f}\n"
         f"• Фишинг: {predict_url['probabilities'].get('phishing', 0):.3f}\n"
         f"• Вирус: {predict_url['probabilities'].get('malware', 0):.3f}")
-
-
-
-
 
 async def main():
     await dp.start_polling(bot)
