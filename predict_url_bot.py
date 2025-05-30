@@ -109,9 +109,9 @@ def _is_valid_url(url):
 async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(
         text=f"Привет!\n"
-        "Я бот для анализа безопасности URL.\n"
-        "Просто отправь мне ссылку или выбери из списка, и я проверю её на:\n"
-        "• Безопасные сайты\n• Порча\n• Фишинг\n• Вредоносное ПО",
+        "Я бот для анализа безопасности URL🤓.\n"
+        "Просто отправь мне ссылку или выбери из списка, и я проверю её на🔎:\n"
+        "• Безопасные сайты😇\n• Порча🧟‍♂️\n• Фишинг👿\n• Вредоносное ПО☠️",
         reply_markup = make_row_keyboard(available_url_names),
         )
     await state.set_state(URLs.write_url_name)
@@ -123,20 +123,20 @@ async def _process_url(message: types.Message):
     logger.info(f"Request from {user.id}: {url}")
     if not _is_valid_url(url):
         await message.answer(
-            "❌ <b>Некорректный URL!</b>\n"
-            "Пример правильного формата:\n"
+            "❌ <b>Некорректный URL!😔</b>\n"
+            "Пример правильного формата✅:\n"
             "<code>https://www.example.com/path?param=value</code>",
             parse_mode='HTML'
         )
         return
     predict_url = predict_url_type(url)
-    await message.answer(f"🔗 Ссылка: {predict_url['url']}\n"
-        f"📊 Класс: {predict_url['predicted_class']}\n\n"
-        f"📈 Вероятности:\n"
-        f"• Безопасная: {predict_url['probabilities'].get('benign', 0):.3f}\n"
-        f"• Порча: {predict_url['probabilities'].get('defacement', 0):.3f}\n"
-        f"• Фишинг: {predict_url['probabilities'].get('phishing', 0):.3f}\n"
-        f"• Вирус: {predict_url['probabilities'].get('malware', 0):.3f}")
+    await message.answer(f"🔗 Ссылка🔎: {predict_url['url']}\n"
+        f"📊 Класс🎲: {predict_url['predicted_class']}\n\n"
+        f"📈 Вероятности👀🧠:\n"
+        f"• Безопасная😇: {predict_url['probabilities'].get('benign', 0):.3f}\n"
+        f"• Порча🧟‍♂️‍: {predict_url['probabilities'].get('defacement', 0):.3f}\n"
+        f"• Фишинг👿: {predict_url['probabilities'].get('phishing', 0):.3f}\n"
+        f"• Вирус☠️: {predict_url['probabilities'].get('malware', 0):.3f}")
 
 async def main():
     await dp.start_polling(bot)
