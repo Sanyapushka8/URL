@@ -9,15 +9,19 @@ from aiogram import Bot, Dispatcher, types
 from aiogram.filters import Command, StateFilter
 from aiogram.fsm.state import StatesGroup, State
 from urllib.parse import urlparse
+from datetime import datetime
 
 # Включаем логирование, чтобы не пропустить важные сообщения
 logging.basicConfig(level=logging.INFO)
+
 # Объект бота
 bot = Bot(token="7930769291:AAEiCjYWaSMu6xqWGdtgi_JGa0NhlMbi1pU")
+
 # Диспетчер
 dp = Dispatcher()
 MAX_LEN = 150
 logger = logging.getLogger(__name__)
+
 #Загружаем готовый материал
 with open("url_classifierXG1.pkl", "rb") as f:
     MODEL = pickle.load(f)
@@ -26,17 +30,18 @@ with open('tfidfXG.pkl', 'rb') as f:
 with open('label_encoderXG.pkl', 'rb') as f:
     le = pickle.load(f)
 
-from datetime import datetime
+# Команда /info (время , когда запущен бот)
 dp["started_at"] = datetime.now().strftime("%Y-%m-%d %H:%M")
-
 @dp.message(Command("info"))
 async def cmd_info(message: types.Message, started_at: str):
     await message.answer(f"Бот запущен {started_at}")
 
+# Команда /dice (кинуть кубик)
 @dp.message(Command("dice"))
 async def cmd_dice(message: types.Message):
     await message.answer_dice(emoji="🎲")
 
+# Применяем функцию токенизации
 def tokenize_url(url):
     try:
         # Удаление протокола и разделение URL на части
@@ -63,6 +68,7 @@ class URLs(StatesGroup):
      write_url_name = State()
      url_classifier = State()
 
+# Применяем функцию предсказывания
 def predict_url_type(url):
     try:
         # Токенизация
@@ -85,6 +91,7 @@ def predict_url_type(url):
         logger.error(f"Error processing URL {url}: {str(e)}")
         return {"error": str(e)}
 
+# Создаём клавиатуру, точнее список URL примеров
 def make_row_keyboard(items: list[str]) -> ReplyKeyboardMarkup:
     row = [KeyboardButton(text=item) for item in items]
     return ReplyKeyboardMarkup(keyboard=[row], resize_keyboard=True)
@@ -94,6 +101,7 @@ available_url_names = [
     "https://example.com"
 ]
 
+# Проверяем URL на валидность
 def _is_valid_url(url):
     """Проверка валидности URL"""
     pattern = re.compile(
@@ -105,6 +113,7 @@ def _is_valid_url(url):
     )
     return bool(re.match(pattern, url))
 
+# Пропишем команду /start, чтобы user понимал , что делает этот бот
 @dp.message(StateFilter(None), Command('start'))
 async def cmd_start(message: types.Message, state: FSMContext):
     await message.answer(
@@ -116,6 +125,7 @@ async def cmd_start(message: types.Message, state: FSMContext):
         )
     await state.set_state(URLs.write_url_name)
 
+# Пропишем функцию для проверки URL на классы
 @dp.message(URLs.write_url_name)
 async def _process_url(message: types.Message):
     url = message.text
@@ -138,6 +148,7 @@ async def _process_url(message: types.Message):
         f"• Фишинг👿: {predict_url['probabilities'].get('phishing', 0):.3f}\n"
         f"• Вирус☠️: {predict_url['probabilities'].get('malware', 0):.3f}")
 
+# Функция для запуска боты
 async def main():
     await dp.start_polling(bot)
 
