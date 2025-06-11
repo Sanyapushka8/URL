@@ -1,0 +1,2 @@
+@predict_url_bot - username телеграмм бота 
+https://web.telegram.org/a/#7930769291 - ссылка на него 
